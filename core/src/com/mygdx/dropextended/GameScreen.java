@@ -1,12 +1,14 @@
 package com.mygdx.dropextended;
 
+import static helpers.AssetManager.bucketImage;
+import static helpers.AssetManager.dropImage;
+import static helpers.AssetManager.dropSound;
+import static helpers.AssetManager.rainMusic;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -16,14 +18,11 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.Iterator;
 
+import helpers.AssetManager;
+
 public class GameScreen implements Screen {
 
     final Drop game;
-
-    Texture dropImage;
-    Texture bucketImage;
-    Sound dropSound;
-    Music rainMusic;
     OrthographicCamera camera;
     Rectangle bucket;
     Array<Rectangle> raindrops;
@@ -33,14 +32,10 @@ public class GameScreen implements Screen {
     public GameScreen(final Drop game) {
         this.game = game;
 
-        // load the images for the droplet and the bucket, 64x64 pixels each
-        dropImage = new Texture(Gdx.files.internal("drop.png"));
-        bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+        AssetManager.load();
 
-        // load the drop sound effect and the rain background "music"
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-        rainMusic.setLooping(true);
+        //rainMusic.setLooping(true);
+        rainMusic.play();
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
@@ -142,7 +137,7 @@ public class GameScreen implements Screen {
     public void show() {
         // start the playback of the background music
         // when the screen is shown
-        rainMusic.play();
+        //rainMusic.play();
     }
 
     @Override
@@ -159,10 +154,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        dropImage.dispose();
-        bucketImage.dispose();
-        dropSound.dispose();
-        rainMusic.dispose();
+
     }
 
 }
