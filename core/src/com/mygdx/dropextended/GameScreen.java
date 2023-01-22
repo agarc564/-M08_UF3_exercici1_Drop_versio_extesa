@@ -17,13 +17,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
 
     final Drop game;
 
-    Texture dropImage;
     Sound dropSound;
     Music rainMusic;
     OrthographicCamera camera;
@@ -34,15 +34,14 @@ public class GameScreen implements Screen {
     // Per obtenir el batch de l'stage
     private Batch batch;
     private Bucket cubell;
+    private DropsHandler dropsHandler;
+    private Drops gota;
+
 
     public GameScreen(final Drop game) {
         this.game = game;
 
-        // load the images for the droplet and the bucket, 64x64 pixels each
-        dropImage = new Texture(Gdx.files.internal("drop.png"));
-
         // load the drop sound effect and the rain background "music"
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
         rainMusic.setLooping(true);
 
@@ -59,12 +58,16 @@ public class GameScreen implements Screen {
 
         batch = stage.getBatch();
 
-        // Creem la nau i la resta d'objectes
-        Bucket cubell = new Bucket(800 / 2 - 64 / 2, 20, 64, 64);
+        // Creem els actors
+        cubell = new Bucket(800 / 2 - 64 / 2, 20, 64, 64);
+        //gota = new Drops(MathUtils.random(0, 800 - 64), 480, 64, 64);
+
+        dropsHandler = new DropsHandler();
 
         // Afegim els actors a l'stage
         stage.addActor(cubell);
-
+        //stage.addActor(gota);
+        stage.addActor(dropsHandler);
     }
 
     private void spawnRaindrop() {
@@ -84,6 +87,12 @@ public class GameScreen implements Screen {
         // blue and alpha component in the range [0,1]
         // of the color to be used to clear the screen.
         ScreenUtils.clear(0, 0, 0.2f, 1);
+
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000){
+            gota = new Drops(MathUtils.random(0, 800 - 64), 480, 64, 64);
+            stage.addActor(gota);
+            lastDropTime = TimeUtils.nanoTime();
+        }
 
         stage.draw();
         stage.act(delta);
@@ -118,7 +127,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        dropImage.dispose();
+        //dropImage.dispose();
         //bucketImage.dispose();
         dropSound.dispose();
         rainMusic.dispose();

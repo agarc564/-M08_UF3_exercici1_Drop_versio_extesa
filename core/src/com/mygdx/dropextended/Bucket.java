@@ -11,11 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Bucket extends Actor {
 
-    // Diferents posicions de l'Spacecraft: recta, pujant i baixant
-    public static final int BUCKET_CENTER = 0;
-    public static final int BUCKET_RIGHT = 1;
-    public static final int BUCKET_LEFT = 2;
-
     private int width, height;
     private Vector2 position;
     Texture bucketImage;
@@ -28,9 +23,6 @@ public class Bucket extends Actor {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
-
-        // Inicialitzem EL CUBELL a l'estat normal
-        direction = BUCKET_CENTER;
 
         //Creem el rectangle de col·lisions
         collisionRect = new Rectangle();
@@ -47,18 +39,7 @@ public class Bucket extends Actor {
 
     @Override
     public void act (float delta){
-        // Movem l'Spacecraft depenent de la direcció controlant que no surti de la pantalla
-        /*switch (direction) {
-            case BUCKET_LEFT:
-                this.position.x -= 200 * Gdx.graphics.getDeltaTime();
-                break;
-            case BUCKET_RIGHT:
-                this.position.x += 200 * Gdx.graphics.getDeltaTime();
-                break;
-            case BUCKET_CENTER:
-                break;
-        }
-        collisionRect.set(position.x, position.y, width, height);*/
+
         // process user input
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
@@ -78,20 +59,6 @@ public class Bucket extends Actor {
             this.position.x = 800 - 64;
     }
 
-    // Canviem la direcció de l'Spacecraft: Puja
-    public void goLeft() {
-        direction = BUCKET_LEFT;
-    }
-
-    // Canviem la direcció de l'Spacecraft: Baixa
-    public void goRight() {
-        direction = BUCKET_RIGHT;
-    }
-
-    // Posem l'Spacecraft al seu estat original
-    public void goCenter() {
-        direction = BUCKET_CENTER;
-    }
 
     // Getters dels atributs principals
     public float getX() {
@@ -108,6 +75,10 @@ public class Bucket extends Actor {
 
     public float getHeight() {
         return height;
+    }
+
+    public Rectangle getCollisionRectangle() {
+        return this.collisionRect;
     }
 
 }
