@@ -66,19 +66,10 @@ public class GameScreen implements Screen {
 
         // Afegim els actors a l'stage
         stage.addActor(cubell);
-        //stage.addActor(gota);
         stage.addActor(dropsHandler);
     }
 
-    private void spawnRaindrop() {
-        Rectangle raindrop = new Rectangle();
-        raindrop.x = MathUtils.random(0, 800 - 64);
-        raindrop.y = 480;
-        raindrop.width = 64;
-        raindrop.height = 64;
-        raindrops.add(raindrop);
-        lastDropTime = TimeUtils.nanoTime();
-    }
+
 
     @Override
     public void render(float delta) {

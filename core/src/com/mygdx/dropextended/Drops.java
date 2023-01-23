@@ -14,7 +14,7 @@ public class Drops extends Actor {
 
     private int width, height;
     private Vector2 position;
-    Texture bucketImage;
+    //Texture bucketImage;
     private Rectangle collisionRect;
     Texture dropImage;
 
@@ -35,14 +35,14 @@ public class Drops extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
+        //super.draw(batch, parentAlpha);
         batch.draw(dropImage, position.x, position.y, width, height);
     }
 
 
     @Override
     public void act (float delta){
-        super.act(delta);
+        //super.act(delta);
         this.position.y -= 200 * Gdx.graphics.getDeltaTime();
         if (this.position.y + 64 < 0)
             this.remove();
