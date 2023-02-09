@@ -56,6 +56,15 @@ public class Drops extends Actor {
 
     }
 
+    // Retorna true si hi ha col·lisió
+    public boolean collides(Bucket cubell) {
+
+        if (position.x <= cubell.getX() + cubell.getWidth()) {
+            return (Intersector.overlaps(collisionRect, cubell.getCollisionRectangle()));
+        }
+        return false;
+    }
+
     public Rectangle getCollisionRectangle() {
         return this.collisionRect;
     }

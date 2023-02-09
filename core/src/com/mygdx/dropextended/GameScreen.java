@@ -2,6 +2,7 @@ package com.mygdx.dropextended;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -34,7 +36,6 @@ public class GameScreen implements Screen {
     // Per obtenir el batch de l'stage
     private Batch batch;
     private Bucket cubell;
-    private DropsHandler dropsHandler;
     private Drops gota;
 
 
@@ -62,11 +63,58 @@ public class GameScreen implements Screen {
         cubell = new Bucket(800 / 2 - 64 / 2, 20, 64, 64);
         //gota = new Drops(MathUtils.random(0, 800 - 64), 480, 64, 64);
 
-        dropsHandler = new DropsHandler();
-
         // Afegim els actors a l'stage
         stage.addActor(cubell);
-        stage.addActor(dropsHandler);
+        //stage.addActor(dropsHandler);
+
+        //Exemple GET request
+        String URL = "http://www.google.es";
+        HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
+        //Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://www.google.es").content("q=libgdx&example=example").build();
+        Net.HttpRequest httpGetRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url(URL).content("q=libgdx&example=example").build();
+
+        //Exemple POST request
+        Net.HttpRequest httpPOST = new Net.HttpRequest(Net.HttpMethods.POST);
+        httpPOST.setUrl(URL);
+        httpPOST.setContent("q=libgdx&example=example");
+
+        //Crea un ResponseListener
+        Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
+
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                    //do something when the request gets resut back
+                Gdx.app.log("MSG", httpResponse.getResultAsString());
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                //do something when it fails
+            }
+
+            @Override
+            public void cancelled() {
+                 //do something when the request get cancelled
+            }
+        };
+        Gdx.net.sendHttpRequest(httpGetRequest, httpResponseListener);
+
+        /*Gdx.net.sendHttpRequest(httpPOST, new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                Gdx.app.log("MSG", httpResponse.getResultAsString());
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                Gdx.app.log("LOGIN", "was NOT successful!");
+            }
+
+            @Override
+            public void cancelled() {
+                Gdx.app.log("LOGIN", "was cancelled!");
+            }
+        });*/
     }
 
 
@@ -87,6 +135,11 @@ public class GameScreen implements Screen {
 
         stage.draw();
         stage.act(delta);
+
+        if (gota.collides(cubell)) {
+            dropsGathered++;
+            dropSound.play();
+        }
     }
 
     public Bucket getCubell() {
@@ -106,14 +159,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
+        //rainMusic.pause();
     }
 
     @Override
     public void pause() {
+        //rainMusic.pause();
     }
 
     @Override
     public void resume() {
+        //rainMusic.play();
     }
 
     @Override
