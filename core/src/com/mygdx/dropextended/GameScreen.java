@@ -1,5 +1,6 @@
 package com.mygdx.dropextended;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -131,6 +132,11 @@ public class GameScreen implements Screen {
                 dropSound.play();
                 iter.remove();
             }
+        }
+        if (dropsGathered >= 3) {
+            //Gdx.app.log("LifeCycle", "3 drops collected");
+            game.setScreen(new FinalScreen(game));
+            dispose();
         }
     }
 
